@@ -70,17 +70,23 @@ void printList(ListNode *pHead)
 	}
 }
 
-void clearList(ListNode *pHead)
+ListNode *clearList(ListNode *pHead)
 {
-	ListNode *pNext; 
-	if(pHead == NULL)
+	ListNode *pNode, *temp;
+	pNode = pHead;   
+	if(pHead == NULL){
 		 printf("%s函数执行，链表为空\n",__FUNCTION__);
-
-	while(pHead->next != NULL && pHead != NULL){
-		pNext = pHead->next; //保存下一结点的指针 
+		 return NULL; 
+	}
+	else {
+		while(pNode->next != NULL && pNode != NULL){
+			temp = pNode->next; //保存下一结点的指针 
+			free(pNode); 		 //释放当前节点 
+			pNode = temp;       //指向下一个节点  
+		}
 		free(pHead);
-		pHead = NULL; 		 //释放当前节点 
-		pHead = pNext;       //指向下一个节点  
+		pHead = NULL;
+		return pHead;  	
 	}
 	printf("%s函数执行，链表已经清除\n",__FUNCTION__); 
 }
@@ -241,7 +247,7 @@ int main(int argc, char const *argv[])
     insertTailList(&pList,10);  //表尾插入元素10  
     printList(pList);  
   
-    clearList(pList);       //清空链表  
+    pList = clearList(pList);       //清空链表  
     printList(pList);  
    
 	return 0;
