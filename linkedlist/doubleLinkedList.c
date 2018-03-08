@@ -1,0 +1,287 @@
+/*
+* 实现一个非循环双向链表（不带头结点）的基本操作
+* athor: hades
+* email: hades2013ac@gmail.com
+* date: 2018-3-8
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef int intType_t;
+typedef struct NodeList{
+
+    int element;
+    struct NodeList *prior;
+    struct NodeList *next;
+}ListNode;
+
+//1.初始化不带头结点的非循环双向链表
+void initList(ListNode *pNode){
+
+    pNode = NULL;
+    printf("%s函数执行，链表初始化完成\n",__FUNCTION__);
+}
+
+//2.创建非循环双向链表
+ListNode *createList(ListNode *pNode){
+
+    ListNode *pInsert;
+    ListNode *pMove;
+    pInsert = (ListNode*)malloc(sizeof(ListNode));
+    memset(pInsert, 0, sizeof(ListNode));
+    pInsert->next = NULL;
+    pInsert->prior = NULL;
+
+    printf("输入元素值： \n");
+    scanf("%d",&(pInsert->element));
+    pMove = pNode;
+
+    if (pInsert->element <= 0) {
+
+        printf("%s函数执行，输入数据非法，建立链表停止\n",__FUNCTION__);
+        return NULL;
+    }
+
+    while (pInsert->element > 0) {
+        if (pNode == NULL) {
+            pNode = pInsert;
+            pMove = pNode;
+        }else{
+
+            pMove->next = pInsert;
+            pInsert->prior = pMove;
+            pMove = pMove->next;
+        }
+
+        pInsert = (ListNode *)malloc(sizeof(ListNode));
+        memset(pInsert, 0, sizeof(ListNode));
+        pInsert->next = NULL;
+        pInsert->prior = NULL;
+        printf("输入元素值： \n");
+        scanf("%d",&(pInsert->element));
+    }
+
+    printf("%s函数执行，建立链表成功\n",__FUNCTION__);
+
+    return pNode;
+}
+
+//3.打印非循环双向链表
+void printList(ListNode *pNode){
+
+    if (pNode == NULL) {
+        printf("%s函数执行，链表为空，打印失败\n",__FUNCTION__);
+    }else{
+        while (pNode != NULL) {
+            printf("%d ",pNode->element);
+            pNode = pNode->next;
+        }
+        printf("\n");
+    }
+}
+
+//4.清除线性表L中的所有元素，使之成为一个空表
+ListNode *clearList(ListNode *pNode){
+
+    if (pNode == NULL) {
+        printf("%s函数执行，原链表就是空链表，无须执行该方法\n",__FUNCTION__);
+        return  NULL;
+    }else{
+        while (pNode->next != NULL) {
+
+            //一次删除每一个节点
+            pNode = pNode->next;
+            free(pNode->prior);
+            pNode->prior = NULL;
+        }
+
+        //清除最后一个节点
+        free(pNode);
+        pNode = NULL;
+
+        printf("%s函数执行，双向非循环链表清空成功\n",__FUNCTION__);
+        return pNode;
+    }
+}
+
+//5.返回不带头节点的双向链表的长度
+int sizeList(ListNode *pNode){
+
+    int i = 0;
+    if (pNode == NULL) {
+        printf("%s函数执行，链表为空，长度为0\n",__FUNCTION__);
+        return 0;
+    }else{
+
+        while (pNode != NULL) {
+            i++;
+            pNode = pNode->next;
+        }
+        printf("%s函数执行，链表长度为%d\n",__FUNCTION__,i);
+        return i;
+    }
+}
+
+//6.检查双链表链表是否为空，若为空则返回１，否则返回０
+int isEmptyList(ListNode *pNode){
+
+    if (pNode == NULL) {
+        printf("%s函数执行，当前链表为空\n",__FUNCTION__);
+        return 1;
+    }
+    printf("%s函数执行，当前链表非空\n",__FUNCTION__);
+
+    return 0;
+}
+
+//7.返回不带头节点的双向非循环链表中第pos位置的元素
+int getElement(ListNode *pNode,int pos){
+
+    int i = 1;
+    ListNode *pMove;
+    pMove = pNode;
+    while (pMove != NULL) {
+
+        if (i == pos) {
+
+            printf("%s函数执行，第pos=%d位置的元素是%d\n",__FUNCTION__,pos,pMove->element);
+            return pMove->element;
+        }
+
+        i++;
+        pMove = pMove->next;
+    }
+
+    printf("%s函数执行，获取pos位置的元素失败\n",__FUNCTION__);
+
+    return -1;
+}
+
+//8.从不带头结点的双链表中查找具有给定值x的第一个元素，若查找成功则返回该结点data域的存储地址，否则返回NULL
+int *getElemAddr(ListNode *pNode,int x){
+
+    ListNode *pMove;
+    pMove = pNode;
+    while (pMove != NULL) {
+        if (pMove->element == x) {
+            printf("%s函数执行，x=%d元素的内存地址为:0x%x\n",__FUNCTION__,x,&(pMove->element));
+            return &(pMove->element);
+        }
+        pMove = pMove->next;
+    }
+    printf("%s函数执行，获取x=%d内存地址失败\n",__FUNCTION__,x);
+    return &(pMove->element);
+}
+
+//9.把双链表中第pos个结点的值修改为x的值，若修改成功返回１，否则返回０
+int modifyElem(ListNode *pNode,int pos,int x){
+
+    int i = 1;
+    ListNode *pMove;
+    pMove = pNode;
+    while (pMove != NULL) {
+        if (i == pos) {
+            pMove->element = x;
+            printf("%s函数执行，修改pos=%d位置的元素成功\n",__FUNCTION__,pos);
+            return 1;
+        }
+        i++;
+        pMove = pMove->next;
+    }
+
+    printf("%s函数执行，修改pos=%d位置的元素失败\n",__FUNCTION__,pos);
+
+    return 1;
+}
+
+//10.向不带头结点的非循环双向链表头部插入一个节点
+ListNode *insertHeadList(ListNode *pNode,int x){
+
+    ListNode *pInsert;
+    pInsert = (ListNode *)malloc(sizeof(ListNode));
+    memset(pInsert, 0, sizeof(ListNode));
+    pInsert->next = NULL;
+    pInsert->prior = NULL;
+    pInsert->element = x;
+
+    //这里要考虑原链表为空的情况
+    if (pNode == NULL) {
+        pNode = pInsert;
+        printf("%s函数执行，在头部插入节点成功\n",__FUNCTION__);
+        return pNode;
+    }
+
+    pInsert->next = pNode;
+    pNode->prior = pInsert;
+    pNode = pInsert;
+    printf("%s函数执行，在头部插入节点成功\n",__FUNCTION__);
+
+    return pNode;
+}
+
+//11.向不带头结点的非循环双向链表尾部插入一个节点
+ListNode *insertTailList(ListNode *pNode,int x){
+
+    ListNode *pMove;
+    ListNode *pInsert;
+    pInsert = (ListNode *)malloc(sizeof(ListNode));
+    memset(pInsert, 0, sizeof(ListNode));
+    pInsert->next = NULL;
+    pInsert->prior = NULL;
+    pInsert->element = x;
+
+    pMove = pNode;
+
+    //这里要考虑原链表为空的情况
+    if (pNode == NULL) {
+        pNode = pInsert;
+        printf("%s函数执行，在尾部插入节点成功\n",__FUNCTION__);
+        return pNode;
+    }
+
+    while (pMove->next != NULL) {
+        pMove = pMove->next;
+    }
+
+    pMove->next = pInsert;
+    pInsert->prior = pMove;
+
+    printf("%s函数执行，在尾部插入节点成功\n",__FUNCTION__);
+
+    return pNode;
+}
+
+
+int main(int argc, const char * argv[]) {
+
+    ListNode *pList = NULL;
+
+    initList(pList);
+    printList(pList);
+    sizeList(pList);
+
+    pList = createList(pList);
+    printList(pList);
+    sizeList(pList);
+
+    isEmptyList(pList);
+
+    getElement(pList, 4);
+
+    getElemAddr(pList, 5);
+
+    modifyElem(pList, 4, 1111);
+    printList(pList);
+
+    pList = insertHeadList(pList, 8888);
+    printList(pList);
+
+    pList = insertTailList(pList,9999);
+    printList(pList);
+
+    pList = clearList(pList);
+    printList(pList);
+    
+    return 0;
+}
