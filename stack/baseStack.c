@@ -1,3 +1,10 @@
+/*
+* 构造栈结构
+* athor: hades
+* email: hades2013ac@gmail.com
+* modify date: 2018-3-10
+*/
+
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <stdbool.h> 
