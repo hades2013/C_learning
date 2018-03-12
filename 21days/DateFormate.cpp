@@ -5,6 +5,8 @@
 * date: 2018-3-12
 */
 #include <iostream>
+#include <sstream>
+#include <string>
 using namespace std; 
 
 class Date
@@ -13,18 +15,17 @@ private:
 	int Day;
 	int Month;
 	int Year; 
+
+	string DateInString; 
 public:
 	Date(int InputDay, int InputMonth, int InputYear)
 		:Day(InputDay), Month(InputMonth), Year(InputYear){};
-	Date& operator++(){
-		Date Copy(Day, Month, Year);
-		++Day; 
-		return *this; 
-	}
-	Date& operator--(){
-		Date Copy(Day, Month, Year);
-		--Day; 
-		return *this; 
+	operator const char*(){
+		ostringstream formattedDate; 
+		formattedDate<<Day<<"/"<<Month<<"/"<<Year<<endl; 
+
+		DateInString = formattedDate.str();
+		return DateInString.c_str();
 	}
 
 	void DisplayDate(){
@@ -36,14 +37,6 @@ public:
 int main(int argc, char const *argv[])
 {
 	Date Holiday(12, 3, 2018);
-	Holiday.DisplayDate();
-	++Holiday; 
-	cout<<"Date after prefix increment is ";
-	Holiday.DisplayDate();
-
-	--Holiday;
-	--Holiday;
-	cout<<"Date after two prefix decremnet is ";
-	Holiday.DisplayDate();
+	cout<<"Holiday is on: "<<Holiday<<endl; 
 	return 0;
 }
